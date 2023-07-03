@@ -1,0 +1,37 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Page</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+
+<body>
+    <div id="message-container" class="container">
+
+        {% for message in messages %}
+            <div class="message">
+                <span class="sender">{{ message.emoticon|safe }}</span>
+                <span class="content">: {{ message.content }}</span>
+            </div>
+        {% endfor %}
+
+        <form class="input-container" method="post">
+            {% csrf_token %}
+            <input type="text" name="message" placeholder="Type your message...">
+            <button type="submit">Send</button>
+        </form>
+
+    </div>
+
+    <!-- Autoscroll when last message was sent. -->
+    <script>
+        var messageContainer = document.getElementById('message-container');
+        messageContainer.scrollTop = messageContainer.scrollHeight;
+    </script>
+
+    
+
+</body>
+</html>
