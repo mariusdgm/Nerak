@@ -3,35 +3,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chat Page</title>
+    <title>Nerak</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 </head>
 
 <body>
-    <div id="message-container" class="container">
+    <div class="container">
+        <div class="message-container" id="messageContainer">
+            {% for message in messages %}
+                <div class="message-wrapper">
+                    <div class="message-row">
+                        <div class="sender-box">
+                            <span class="sender">{{ message.emoticon|safe }}</span>
+                        </div>
+                        <div class="content-box">
+                            <span class="content">{{ message.content }}</span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
 
-        {% for message in messages %}
-            <div class="message">
-                <span class="sender">{{ message.emoticon|safe }}</span>
-                <span class="content">: {{ message.content }}</span>
-            </div>
-        {% endfor %}
-
-        <form class="input-container" method="post">
+        <form class="input-container" method="post" action="{% url 'chat_page' %}">
             {% csrf_token %}
-            <input type="text" name="message" placeholder="Type your message...">
-            <button type="submit">Send</button>
+            <div class="input-field">
+                {{ message_form.message_text }}
+            </div>
+            <button type="submit">&#10148;</button>
         </form>
-
     </div>
-
-    <!-- Autoscroll when last message was sent. -->
-    <script>
-        var messageContainer = document.getElementById('message-container');
-        messageContainer.scrollTop = messageContainer.scrollHeight;
-    </script>
-
-    
 
 </body>
 </html>
