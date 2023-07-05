@@ -149,6 +149,11 @@
         background-color: #0056b3;
     }
 
+    .input-container button:disabled {
+        background-color: #808080;
+        cursor: default;
+    }
+
     /* User Message */
     .message-row[data-sender="user"] {
         background-color: #27c7ac;

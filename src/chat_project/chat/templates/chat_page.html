@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Nerak</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
@@ -11,16 +12,16 @@
     <div class="container">
         <div class="message-container" id="messageContainer">
             {% for message in messages %}
-                <div class="message-wrapper">
-                    <div class="message-row">
-                        <div class="sender-box">
-                            <span class="sender">{{ message.emoticon|safe }}</span>
-                        </div>
-                        <div class="content-box">
-                            <span class="content">{{ message.content }}</span>
-                        </div>
+            <div class="message-wrapper">
+                <div class="message-row">
+                    <div class="sender-box">
+                        <span class="sender">{{ message.emoticon|safe }}</span>
+                    </div>
+                    <div class="content-box">
+                        <span class="content">{{ message.content }}</span>
                     </div>
                 </div>
+            </div>
             {% endfor %}
         </div>
 
@@ -29,9 +30,17 @@
             <div class="input-field">
                 {{ message_form.message_text }}
             </div>
-            <button type="submit">&#10148;</button>
+            <button type="submit" id="submitButton" {% if message_form.is_submit_disabled %} disabled {% endif %}>&#10148;</button>
         </form>
     </div>
 
+    <script>
+        function updateSubmitButton(inputField) {
+            const submitButton = document.getElementById('submitButton');
+            submitButton.disabled = inputField.value.trim() === '';
+        }
+    </script>
+
 </body>
+
 </html>
