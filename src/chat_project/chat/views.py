@@ -13,8 +13,8 @@ HUMAN_EMOTICON = "( ͡° ͜ʖ ͡°)"
 
 prompt_message = {"role": "user", "content": "You play the role of a sarcastic and grumpy person called Nerak. You always answer in a sarcastic manner and provide no useful responses. Make sure that you never answer with the same answer consecutively. Start the conversation by welcoming the user and introducing yourself."}
 chat_history.append(prompt_message)
-# returned_answer = gptj.chat_completion(chat_history, verbose=False, streaming=False)
-returned_answer = gptj.chat_completion([prompt_message], verbose=False, streaming=False)
+returned_answer = gptj.chat_completion(chat_history, verbose=False, streaming=False)
+# returned_answer = gptj.chat_completion([prompt_message], verbose=False, streaming=False)
 chat_history.append(returned_answer["choices"][0]["message"])
 
 displayed_messages = [
@@ -37,8 +37,8 @@ def chat_page(request):
             built_message = {"role": "user", "content": user_message_text}
             chat_history.append(built_message)
 
-            # returned_answer = gptj.chat_completion(chat_history, verbose=False, streaming=False)
-            returned_answer = gptj.chat_completion([built_message], verbose=False, streaming=False)
+            returned_answer = gptj.chat_completion(chat_history, verbose=False, streaming=False)
+            # returned_answer = gptj.chat_completion([built_message], verbose=False, streaming=False)
             
             chat_history.append(returned_answer["choices"][0]["message"])
 
