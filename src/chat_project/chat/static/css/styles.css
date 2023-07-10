@@ -54,12 +54,10 @@
         max-width: 800px;
         margin-left: auto;
         margin-right: auto;
-    }
-
-    .message-wrapper {
         width: 100%;
         margin: 0 auto;
     }
+
 
     .message-row {
         background-color: #23272a;
@@ -155,29 +153,74 @@
     }
 
     /* User Message */
-    .message-row[data-sender="user"] {
-        background-color: #27c7ac;
+    .message-wrapper[data-sender="user"] {
+        background-color: #232527;
     }
 
-    .message-row[data-sender="user"] .sender {
-        color: #27c7ac;
+    .message-wrapper[data-sender="user"] .message-row{
+        background-color: #232527;
     }
 
-    .message-row[data-sender="user"] .content-box {
-        color: #27c7ac;
+    .message-wrapper[data-sender="user"] .sender {
+        color: #fff;
+    }
+
+    .message-wrapper[data-sender="user"] .content-box {
+        color: #fff;
     }
 
     /* Bot Message */
-    .message-row[data-sender="bot"] {
-        background-color: #dc3545;
+
+    .message-wrapper[data-sender="bot"]{
+        background-color: #353942;
     }
 
-    .message-row[data-sender="bot"] .sender {
-        color: #dc3545;
+    .message-wrapper[data-sender="bot"] .message-row{
+        background-color: #353942;
     }
 
-    .message-row[data-sender="bot"] .content-box {
-        color: #dc3545;
+    .message-wrapper[data-sender="bot"] .sender {
+        color: #d7d6e8;
     }
+
+    .message-wrapper[data-sender="bot"] .content-box {
+        color: #d7d6e8;
+    }
+
+    .loader {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #007bff;
+        animation: spin 1s linear infinite;
+        margin-right: 10px;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .loading-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .loading-container .loading-indicator {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .loading-text {
+        margin-left: 10px;
+        color: #f1f1f1;
+    }
+
     
 </style>

@@ -5,6 +5,7 @@
 
 <head>
     <title>Nerak</title>
+    <link rel="icon" href="{% static 'favicon.ico' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 </head>
 
@@ -12,7 +13,7 @@
     <div class="container">
         <div class="message-container" id="messageContainer">
             {% for message in messages %}
-            <div class="message-wrapper">
+            <div class="message-wrapper" data-sender="{{ message.sender }}">
                 <div class="message-row">
                     <div class="sender-box">
                         <span class="sender">{{ message.emoticon|safe }}</span>
@@ -25,7 +26,13 @@
             {% endfor %}
         </div>
 
-        <form class="input-container" method="post" action="{% url 'chat_page' %}">
+        <div class="loading-container">
+            <div class="loading-indicator" id="loadingIndicator">
+                <div class="loader"></div>
+            </div>
+        </div>
+
+        <form class="input-container" method="post" action="{% url 'chat_page' %}" id="chatForm">
             {% csrf_token %}
             <div class="input-field">
                 {{ message_form.message_text }}
@@ -35,12 +42,107 @@
     </div>
 
     <script>
+        const form = document.getElementById('chatForm');
+        const inputField = form.elements.message_text;
+        const submitButton = form.querySelector('button[type="submit"]');
+        const messageContainer = document.getElementById('messageContainer');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+
+        inputField.addEventListener('input', function() {
+            updateSubmitButton(inputField);
+        });
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Disable the submit button
+            submitButton.disabled = true;
+
+            // Show the loading indicator
+            loadingIndicator.style.display = 'block';
+
+            // Send the message
+            sendMessage(event);
+        });
+
         function updateSubmitButton(inputField) {
-            const submitButton = document.getElementById('submitButton');
             submitButton.disabled = inputField.value.trim() === '';
         }
-    </script>
 
+        function sendMessage(event) {
+            const form = event.target;
+            const inputField = form.elements.message_text;
+            const userMessageText = inputField.value.trim();
+
+            if (userMessageText === '') {
+                return;
+            }
+
+             // Disable the submit button
+            submitButton.disabled = true;
+
+            // Show the loading indicator
+            loadingIndicator.style.display = 'block';
+
+            // Append the user message
+            messageContainer.innerHTML += `
+                <div class="message-wrapper" data-sender="user">
+                    <div class="message-row">
+                        <div class="sender-box">
+                            <span class="sender">( ͡° ͜ʖ ͡°)</span>
+                        </div>
+                        <div class="content-box">
+                            <span class="content">${userMessageText}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Send the message asynchronously
+            fetch(form.action, {
+                method: form.method,
+                body: new URLSearchParams(new FormData(form))
+            })
+            .then(response => response.json())
+            .then(responseData => {
+                // Append the bot message
+                messageContainer.innerHTML += `
+                    <div class="message-wrapper" data-sender="bot">
+                        <div class="message-row">
+                            <div class="sender-box">
+                                <span class="sender">¯\\_(ツ)_/¯</span>
+                            </div>
+                            <div class="content-box">
+                                <span class="content">${responseData.bot_message}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Scroll to the bottom of the message container
+                messageContainer.scrollTop = messageContainer.scrollHeight;
+
+                // Hide the loading indicator
+                loadingIndicator.style.display = 'none';
+
+                // Enable the submit button
+                submitButton.disabled = false;
+
+                inputField.value = '';
+
+                // Update the submit button
+                updateSubmitButton(inputField);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle the error if needed
+                // Enable the submit button and hide the loading indicator
+                submitButton.disabled = false;
+                loadingIndicator.style.display = 'none';
+            });
+        }
+ 
+    </script>
 </body>
 
 </html>
